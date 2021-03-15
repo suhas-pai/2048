@@ -17,13 +17,7 @@
         <h3>High Score: {{ highScore == undefined ? 0 : highScore }}</h3>
         <h3>Score: {{ score }}</h3>
       </div>
-      <div
-        @keyup.page-up="onPageUp"
-        @keyup.page-down="onPageDown"
-        @keyup.page-left="onPageLeft"
-        @keyup.page-right="onPageRight"
-        class="grid"
-      >
+      <div class="grid">
         <div v-for="row_num in 4" class="tile-row">
           <div
             v-for="tile_num in 4"
