@@ -125,8 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Only load highScore from the database the *first* time we're called,
         // not on every restart.
 
-        if (this.firestore != null) {
-          if (this.highScore == undefined) {
+        if (this.highScore == undefined) {
+          if (this.firestore != null) {
             this.highScore = "Loading...";
             try {
               let doc = await this.firestore
@@ -143,9 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
               this.highScore = 0;
             }
+          } else {
+            this.highScore = 0;
           }
-        } else {
-          this.highScore = 0;
         }
 
         this.tileValues.forEach((row, rowIndex) => {
