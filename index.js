@@ -100,7 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // set undefined to when we haven't even loaded from the server yet
         highScore: undefined,
         gameOver: true,
-        newPos: { row: 4, col: 4 },
         message: "",
         name: "",
         firestore: null,
@@ -168,9 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.setTileAtPos(tileRand1.row, tileRand1.col, 2);
         this.setTileAtPos(tileRand2.row, tileRand2.col, 2);
-
-        this.newPos.row = 4;
-        this.newPos.row = 4;
       },
       autoPlay: function () {
         const actions = [this.goUp, this.goDown, this.goLeft, this.goRight];
@@ -341,9 +337,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setTileAtPos: function (row, col, val) {
         this.writeIndex(row, col, val);
         this.tilesFree--;
-
-        this.newPos.row = row;
-        this.newPos.col = col;
       },
       writeIndex: function (row, col, value) {
         // Reactive 2d array-setting in Vue
