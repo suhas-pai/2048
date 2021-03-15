@@ -108,14 +108,14 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     },
     methods: {
-      isGameEnabled() {
+      isGameEnabled: function () {
         if (this.$refs.name == undefined) {
           return false;
         }
 
         return !this.gameOver && this.$refs.name.value.length != 0;
       },
-      async initGame() {
+      initGame: async function () {
         this.$refs.name.disabled = "disabled";
         this.message = "Playing game...";
         this.score = 0;
@@ -172,14 +172,14 @@ document.addEventListener("DOMContentLoaded", () => {
         this.newPos.row = 4;
         this.newPos.row = 4;
       },
-      autoPlay() {
+      autoPlay: function () {
         const actions = [this.goUp, this.goDown, this.goLeft, this.goRight];
         while (!this.gameOver) {
           actions[getRandom()]();
           this.handlePostAction();
         }
       },
-      combineArrayLeft(obj) {
+      combineArrayLeft: function (obj) {
         let arr = obj.arr;
         for (let i = 0; i < 3; i++) {
           const left = arr[i];
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return 0;
       },
-      combineArrayRight(obj) {
+      combineArrayRight: function (obj) {
         let arr = obj.arr;
         for (let i = 3; i > 0; i--) {
           const left = arr[i];
@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return 0;
       },
-      generateNewTile() {
+      generateNewTile: function () {
         let newPos = null;
         do {
           newPos = getRandomPos();
@@ -241,12 +241,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.setTileAtPos(newPos.row, newPos.col, getRandomBool() ? 2 : 4);
       },
-      writeColArray(col, colArray) {
+      writeColArray: function (col, colArray) {
         for (let row = 0; row < DIMENSION; row++) {
           this.writeIndex(row, col, colArray[row]);
         }
       },
-      goUp() {
+      goUp: function () {
         var movedTiles = false;
         forEachColumn(this.tileValues, (col, colArray) => {
           let result = moveArrayLeft(colArray);
@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
           this.generateNewTile();
         }
       },
-      goDown() {
+      goDown: function () {
         var movedTiles = false;
         forEachColumn(this.tileValues, (col, colArray) => {
           let result = moveArrayRight(colArray);
@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
           this.generateNewTile();
         }
       },
-      goLeft() {
+      goLeft: function () {
         var movedTiles = false;
         this.tileValues.forEach((row, index) => {
           let result = moveArrayLeft(row);
@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
           this.generateNewTile();
         }
       },
-      goRight() {
+      goRight: function () {
         var movedTiles = false;
         this.tileValues.forEach((row, index) => {
           let result = moveArrayRight(row);
@@ -330,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
           this.generateNewTile();
         }
       },
-      getTileClass(row, col) {
+      getTileClass: function (row, col) {
         const val = this.tileValues[row][col];
         if (val != undefined) {
           return `tile tile-${val}`;
@@ -338,14 +338,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return "tile-empty";
       },
-      setTileAtPos(row, col, val) {
+      setTileAtPos: function (row, col, val) {
         this.writeIndex(row, col, val);
         this.tilesFree--;
 
         this.newPos.row = row;
         this.newPos.col = col;
       },
-      writeIndex(row, col, value) {
+      writeIndex: function (row, col, value) {
         // Reactive 2d array-setting in Vue
         // https://stackoverflow.com/a/45644966
 
@@ -354,13 +354,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.setRow(row, newRow);
       },
-      setRow(row, newRow) {
+      setRow: function (row, newRow) {
         // Reactive 2d array-setting in Vue
         // https://stackoverflow.com/a/45644966
 
         this.$set(this.tileValues, row, newRow);
       },
-      checkIfGameOver() {
+      checkIfGameOver: function () {
         if (this.tilesFree != 0) {
           return;
         }
@@ -430,7 +430,7 @@ document.addEventListener("DOMContentLoaded", () => {
           { merge: true }
         );
       },
-      handlePostAction() {
+      handlePostAction: function () {
         if (this.highScore < this.score) {
           this.highScore = this.score;
           this.highScoreChanged = true;
@@ -439,20 +439,19 @@ document.addEventListener("DOMContentLoaded", () => {
         this.checkIfGameOver();
       },
     },
-    created() {
+    created: function () {
       // Initialize Firebase
       if (FIREBASE_CONFIG != null) {
         firebase.initializeApp(FIREBASE_CONFIG);
         this.firestore = firebase.firestore();
       }
     },
-    mounted() {
+    mounted: function () {
       window.addEventListener("keydown", (e) => {
-        if (!this.isGameEnabled() || this.handlingKeyDown) {
+        if (!this.isGameEnabled()) {
           return;
         }
 
-        this.handlingKeyDown = true;
         switch (e.code) {
           case "ArrowUp":
             this.goUp();
@@ -471,7 +470,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         this.handlePostAction();
-        this.handlingKeyDown = false;
       });
     },
   });
