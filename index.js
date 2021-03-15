@@ -90,7 +90,7 @@ const arraysDifferent = (left, right) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  var app = new Vue({
+  new Vue({
     el: "#app",
     data: {
       tilesFree: 16,
