@@ -1,0 +1,86 @@
+body {
+  font-family: sans-serif;
+  color: rgb(229, 231, 235);
+  background-color: rgb(51, 52, 54);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  margin-bottom: 15px;
+}
+
+.tile-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.tile,
+.tile-empty,
+.tile-new {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  width: 107px;
+  height: 107px;
+  margin: 2px;
+  color: white;
+}
+
+.tile-2 {
+  background-color: rgb(57, 44, 28);
+}
+
+.tile-4 {
+  background-color: rgb(71, 56, 26);
+}
+
+.tile-8 {
+  background-color: rgb(123, 69, 20);
+}
+
+.tile-16 {
+  background-color: rgb(135, 59, 17);
+}
+
+.tile-32 {
+  background-color: rgb(136, 39, 15);
+}
+
+.tile-64 {
+  background-color: rgb(156, 44, 16);
+}
+
+.tile-128 {
+  background-color: #edd073;
+}
+
+.tile-256 {
+  background-color: #edcc62;
+}
+
+.tile-512 {
+  background-color: #edc950;
+}
+
+.tile-1024 {
+  background-color: #edc53f;
+}
+
+.tile-2048 {
+  background-color: #edc22e;
+}
+
+.tile-empty {
+  background-color: rgba(57, 44, 28, 0.35);
+}
+
+.tile-new {
+  background-color: rgb(255, 202, 202);
+}
