@@ -92,7 +92,7 @@ const arraysDifferent = (left, right) => {
 document.addEventListener("DOMContentLoaded", () => {
   new Vue({
     el: "#app",
-    data: function () {
+    data: () => {
       return {
         tilesFree: 16,
         tileValues: [[], [], [], []],
@@ -432,14 +432,14 @@ document.addEventListener("DOMContentLoaded", () => {
         this.checkIfGameOver();
       },
     },
-    created: function () {
+    created: () => {
       // Initialize Firebase
       if (FIREBASE_CONFIG != null) {
         firebase.initializeApp(FIREBASE_CONFIG);
         this.firestore = firebase.firestore();
       }
     },
-    mounted: function () {
+    mounted: () => {
       window.addEventListener("keydown", (e) => {
         if (!this.isGameEnabled()) {
           return;
