@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js" /></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script type="text/javascript" src="index.js"></script>
@@ -12,7 +12,7 @@
   <body>
     <div id="app">
       <h1>2048</h1>
-      <p> {{ message }} </p>
+      <p>{{ message }}</p>
       <div>
         <h3>High Score: {{ highScore == undefined ? 0 : highScore }}</h3>
         <h3>Score: {{ score }}</h3>
@@ -28,9 +28,26 @@
         </div>
       </div>
       <div>
-        <input ref="name" type="text" placeholder="Enter name" v-model="name" @keyup.enter="initGame"/>
-        <button ref="startButton" :disabled="name.length == 0 || isGameEnabled()" @click.event="initGame">Start Game</button>
-        <button :disabled="name.length == 0 || gameOver" @click.exact="autoPlay">Auto Play</button>
+        <input
+          ref="name"
+          type="text"
+          placeholder="Enter name"
+          v-model="name"
+          @keyup.enter="initGame"
+        />
+        <button
+          ref="startButton"
+          :disabled="name.length == 0 || isGameEnabled()"
+          @click.event="initGame"
+        >
+          Start Game
+        </button>
+        <button
+          :disabled="name.length == 0 || gameOver"
+          @click.exact="autoPlay"
+        >
+          Auto Play
+        </button>
       </div>
     </div>
   </body>
