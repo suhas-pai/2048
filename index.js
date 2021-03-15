@@ -92,19 +92,20 @@ const arraysDifferent = (left, right) => {
 document.addEventListener("DOMContentLoaded", () => {
   new Vue({
     el: "#app",
-    data: {
-      tilesFree: 16,
-      tileValues: [[], [], [], []],
-      score: 0,
-      // set undefined to when we haven't even loaded from the server yet
-      highScore: undefined,
-      handlingKeyDown: false,
-      gameOver: true,
-      newPos: { row: 4, col: 4 },
-      message: "",
-      name: "",
-      firestore: null,
-      highScoreChanged: false,
+    data: function () {
+      return {
+        tilesFree: 16,
+        tileValues: [[], [], [], []],
+        score: 0,
+        // set undefined to when we haven't even loaded from the server yet
+        highScore: undefined,
+        gameOver: true,
+        newPos: { row: 4, col: 4 },
+        message: "",
+        name: "",
+        firestore: null,
+        highScoreChanged: false,
+      };
     },
     methods: {
       isGameEnabled() {
