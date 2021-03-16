@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
     el: "#app",
     data: () => {
       return {
-        tilesFree: 16,
+        tilesFree: 0,
         tileValues: [[], [], [], []],
         score: 0,
         // set undefined to when we haven't even loaded from the server yet
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.message = "Playing game...";
         this.score = 0;
         this.gameOver = false;
-        this.tilesFree = 16;
+        this.tilesFree = DIMENSION ** 2;
         this.highScoreChanged = false;
 
         // Only load highScore from the database the *first* time we're called,
