@@ -176,10 +176,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       },
       combineArrayLeft: function (obj) {
-        let arr = obj.arr;
+        let result = 0;
         for (let i = 0; i < 3; i++) {
-          const left = arr[i];
-          const right = arr[i + 1];
+          const left = obj.arr[i];
+          const right = obj.arr[i + 1];
 
           if (left == undefined || right == undefined) {
             continue;
@@ -191,22 +191,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const newValue = left * 2;
 
-          arr[i] = `${newValue}`;
-          arr[i + 1] = undefined;
+          obj.arr[i] = `${newValue}`;
+          obj.arr[i + 1] = undefined;
 
-          obj.arr = moveArrayLeft(arr);
+          obj.arr = moveArrayLeft(obj.arr);
           this.tilesFree++;
 
-          return newValue;
+          result += newValue;
         }
 
-        return 0;
+        return result;
       },
       combineArrayRight: function (obj) {
-        let arr = obj.arr;
+        let result = 0;
         for (let i = 3; i > 0; i--) {
-          const left = arr[i];
-          const right = arr[i - 1];
+          const left = obj.arr[i];
+          const right = obj.arr[i - 1];
 
           if (left == undefined || right == undefined) {
             continue;
@@ -218,16 +218,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const newValue = left * 2;
 
-          arr[i] = newValue;
-          arr[i - 1] = undefined;
+          obj.arr[i] = newValue;
+          obj.arr[i - 1] = undefined;
 
-          obj.arr = moveArrayRight(arr);
+          obj.arr = moveArrayRight(obj.arr);
           this.tilesFree++;
 
-          return newValue;
+          result += newValue;
         }
 
-        return 0;
+        return result;
       },
       generateNewTile: function () {
         let newPos = null;
