@@ -1,38 +1,10 @@
-const DIMENSION = 4;
 const FIREBASE_CONFIG = null;
-
-const getRandom = () => {
-  return Math.floor(Math.random() * DIMENSION);
-};
-
 const getRandomBool = () => {
   return Boolean(Math.floor(Math.random() * 2));
 };
 
-const getRandomPos = () => {
-  return { row: getRandom(), col: getRandom() };
-};
-
 const posEquals = (left, right) => {
   return left.row == right.row && left.col == right.col;
-};
-
-const moveArrayLeft = (arr) => {
-  let result = arr.filter((value) => value != undefined);
-  for (let i = result.length; i < DIMENSION; i++) {
-    result.push(undefined);
-  }
-
-  return result;
-};
-
-const moveArrayRight = (arr) => {
-  let result = arr.filter((value) => value != undefined);
-  for (let i = result.length; i < DIMENSION; i++) {
-    result.unshift(undefined);
-  }
-
-  return result;
 };
 
 const verifyArray = (arr) => {
@@ -57,24 +29,6 @@ const verifyArray = (arr) => {
   }
 };
 
-const forEachColumn = (arr, callback) => {
-  for (let col = 0; col < DIMENSION; col++) {
-    let colArray = [];
-    for (let row = 0; row < DIMENSION; row++) {
-      const tileValue = arr[row][col];
-      if (tileValue != undefined) {
-        colArray.push(tileValue);
-      }
-    }
-
-    if (colArray.length == 0) {
-      continue;
-    }
-
-    callback(col, colArray);
-  }
-};
-
 const arraysDifferent = (left, right) => {
   if (left.length != right.length) {
     return true;
@@ -95,9 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
     data: () => {
       return {
         tilesFree: 0,
-        tileValues: [[], [], [], []],
+        dimension: 4,
+        tileValues: [],
         score: 0,
-        // set undefined to when we haven't even loaded from the server yet
+        // set to undefined so we know when to call firebase (only in created())
         highScore: undefined,
         gameOver: true,
         message: "",
@@ -107,6 +62,45 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     },
     methods: {
+      getRandom: function () {
+        return Math.floor(Math.random() * this.dimension);
+      },
+      getRandomPos: function () {
+        return { row: this.getRandom(), col: this.getRandom() };
+      },
+      moveArrayLeft: function (arr) {
+        let result = arr.filter((value) => value != undefined);
+        for (let i = result.length; i < this.dimension; i++) {
+          result.push(undefined);
+        }
+
+        return result;
+      },
+      moveArrayRight: function (arr) {
+        let result = arr.filter((value) => value != undefined);
+        for (let i = result.length; i < this.dimension; i++) {
+          result.unshift(undefined);
+        }
+
+        return result;
+      },
+      forEachColumn: function (arr, callback) {
+        for (let col = 0; col < this.dimension; col++) {
+          let colArray = [];
+          for (let row = 0; row < this.dimension; row++) {
+            const tileValue = arr[row][col];
+            if (tileValue != undefined) {
+              colArray.push(tileValue);
+            }
+          }
+
+          if (colArray.length == 0) {
+            continue;
+          }
+
+          callback(col, colArray);
+        }
+      },
       isGameEnabled: function () {
         if (this.$refs.name == undefined) {
           return false;
@@ -119,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.message = "Playing game...";
         this.score = 0;
         this.gameOver = false;
-        this.tilesFree = DIMENSION ** 2;
+        this.tilesFree = this.dimension ** 2;
         this.highScoreChanged = false;
 
         // Only load highScore from the database the *first* time we're called,
@@ -150,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.tileValues.forEach((row, rowIndex) => {
           const newRow = [];
-          for (let i = 0; i < DIMENSION; i++) {
+          for (let i = 0; i < this.dimension; i++) {
             newRow.push(undefined);
           }
 
@@ -161,8 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let tileRand2 = null;
 
         do {
-          tileRand1 = getRandomPos();
-          tileRand2 = getRandomPos();
+          tileRand1 = this.getRandomPos();
+          tileRand2 = this.getRandomPos();
         } while (posEquals(tileRand1, tileRand2));
 
         this.setTileAtPos(tileRand1.row, tileRand1.col, 2);
@@ -177,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       combineArrayLeft: function (obj) {
         let result = 0;
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < this.dimension - 1; i++) {
           const left = obj.arr[i];
           const right = obj.arr[i + 1];
 
@@ -194,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
           obj.arr[i] = `${newValue}`;
           obj.arr[i + 1] = undefined;
 
-          obj.arr = moveArrayLeft(obj.arr);
+          obj.arr = this.moveArrayLeft(obj.arr);
           this.tilesFree++;
 
           result += newValue;
@@ -204,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       combineArrayRight: function (obj) {
         let result = 0;
-        for (let i = 3; i > 0; i--) {
+        for (let i = this.dimension - 1; i > 0; i--) {
           const left = obj.arr[i];
           const right = obj.arr[i - 1];
 
@@ -221,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
           obj.arr[i] = newValue;
           obj.arr[i - 1] = undefined;
 
-          obj.arr = moveArrayRight(obj.arr);
+          obj.arr = this.moveArrayRight(obj.arr);
           this.tilesFree++;
 
           result += newValue;
@@ -232,31 +226,28 @@ document.addEventListener("DOMContentLoaded", () => {
       generateNewTile: function () {
         let newPos = null;
         do {
-          newPos = getRandomPos();
+          newPos = this.getRandomPos();
         } while (this.tileValues[newPos.row][newPos.col] != undefined);
 
         this.setTileAtPos(newPos.row, newPos.col, getRandomBool() ? 2 : 4);
       },
       writeColArray: function (col, colArray) {
-        for (let row = 0; row < DIMENSION; row++) {
+        for (let row = 0; row < this.dimension; row++) {
           this.writeIndex(row, col, colArray[row]);
         }
       },
       goUp: function () {
         var movedTiles = false;
-        forEachColumn(this.tileValues, (col, colArray) => {
-          let result = moveArrayLeft(colArray);
-          let resultObject = { arr: result };
+        this.forEachColumn(this.tileValues, (col, colArray) => {
+          let result = { arr: this.moveArrayLeft(colArray) };
+          this.score += this.combineArrayLeft(result);
 
-          this.score += this.combineArrayLeft(resultObject);
-          result = resultObject.arr;
-
-          if (arraysDifferent(colArray, result)) {
+          if (arraysDifferent(colArray, result.arr)) {
             movedTiles = true;
           }
 
-          verifyArray(result);
-          this.writeColArray(col, result);
+          verifyArray(result.arr);
+          this.writeColArray(col, result.arr);
         });
 
         if (movedTiles) {
@@ -265,19 +256,16 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       goDown: function () {
         var movedTiles = false;
-        forEachColumn(this.tileValues, (col, colArray) => {
-          let result = moveArrayRight(colArray);
-          let resultObject = { arr: result };
+        this.forEachColumn(this.tileValues, (col, colArray) => {
+          let result = { arr: this.moveArrayRight(colArray) };
+          this.score += this.combineArrayRight(result);
 
-          this.score += this.combineArrayRight(resultObject);
-          result = resultObject.arr;
-
-          if (arraysDifferent(colArray, result)) {
+          if (arraysDifferent(colArray, result.arr)) {
             movedTiles = true;
           }
 
-          verifyArray(result);
-          this.writeColArray(col, result);
+          verifyArray(result.arr);
+          this.writeColArray(col, result.arr);
         });
 
         if (movedTiles) {
@@ -287,18 +275,15 @@ document.addEventListener("DOMContentLoaded", () => {
       goLeft: function () {
         var movedTiles = false;
         this.tileValues.forEach((row, index) => {
-          let result = moveArrayLeft(row);
-          let resultObject = { arr: result };
+          let result = { arr: this.moveArrayLeft(row) };
+          this.score += this.combineArrayLeft(result);
 
-          this.score += this.combineArrayLeft(resultObject);
-          result = resultObject.arr;
-
-          if (arraysDifferent(row, result)) {
+          if (arraysDifferent(row, result.arr)) {
             movedTiles = true;
           }
 
-          verifyArray(result);
-          this.setRow(index, result);
+          verifyArray(result.arr);
+          this.setRow(index, result.arr);
         });
 
         if (movedTiles) {
@@ -308,18 +293,15 @@ document.addEventListener("DOMContentLoaded", () => {
       goRight: function () {
         var movedTiles = false;
         this.tileValues.forEach((row, index) => {
-          let result = moveArrayRight(row);
-          let resultObject = { arr: result };
+          let result = { arr: this.moveArrayRight(row) };
+          this.score += this.combineArrayRight(result);
 
-          this.score += this.combineArrayRight(resultObject);
-          result = resultObject.arr;
-
-          if (arraysDifferent(row, result)) {
+          if (arraysDifferent(row, result.arr)) {
             movedTiles = true;
           }
 
-          verifyArray(result);
-          this.setRow(index, result);
+          verifyArray(result.arr);
+          this.setRow(index, result.arr);
         });
 
         if (movedTiles) {
@@ -374,14 +356,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
 
-          if (col != DIMENSION - 1) {
+          if (col != this.dimension - 1) {
             const rightValue = this.tileValues[row][col + 1];
             if (value == rightValue) {
               return true;
             }
           }
 
-          if (row != DIMENSION - 1) {
+          if (row != this.dimension - 1) {
             const bottomValue = this.tileValues[row + 1][col];
             if (value == bottomValue) {
               return true;
@@ -393,7 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let canMove = false;
         this.tileValues.forEach((row, rowIndex) => {
-          for (let col = 0; col !== DIMENSION; col++) {
+          for (let col = 0; col !== this.dimension; col++) {
             if (posCanMove(rowIndex, col)) {
               canMove = true;
             }
@@ -432,14 +414,18 @@ document.addEventListener("DOMContentLoaded", () => {
         this.checkIfGameOver();
       },
     },
-    created: () => {
+    created: function () {
       // Initialize Firebase
       if (FIREBASE_CONFIG != null) {
         firebase.initializeApp(FIREBASE_CONFIG);
         this.firestore = firebase.firestore();
       }
+
+      for (let i = 0; i < this.dimension; i++) {
+        this.tileValues.push([]);
+      }
     },
-    mounted: () => {
+    mounted: function () {
       window.addEventListener("keydown", (e) => {
         if (!this.isGameEnabled()) {
           return;

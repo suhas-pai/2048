@@ -18,9 +18,9 @@
         <h3>Score: {{ score }}</h3>
       </div>
       <div class="grid">
-        <div v-for="row_num in 4" class="tile-row">
+        <div v-for="row_num in dimension" class="tile-row">
           <div
-            v-for="tile_num in 4"
+            v-for="tile_num in dimension"
             :class="getTileClass(row_num - 1, tile_num - 1)"
           >
             {{ tileValues[row_num - 1][tile_num - 1] }}
