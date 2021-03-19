@@ -83,6 +83,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return result;
       },
+      // For readability
+      forEachRow: function (arr, callback) {
+        arr.forEach(callback);
+      },
       forEachColumn: function (arr, callback) {
         for (let col = 0; col < this.dimension; col++) {
           let colArray = [];
@@ -141,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
 
-        this.tileValues.forEach((row, rowIndex) => {
+        this.forEachRow(this.tileValues, (row, rowIndex) => {
           const newRow = [];
           for (let i = 0; i < this.dimension; i++) {
             newRow.push(undefined);
@@ -273,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       goLeft: function () {
         var movedTiles = false;
-        this.tileValues.forEach((row, index) => {
+        this.forEachRow(this.tileValues, (row, index) => {
           let result = { arr: this.moveArrayLeft(row) };
           this.score += this.combineArrayLeft(result);
 
@@ -291,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       goRight: function () {
         var movedTiles = false;
-        this.tileValues.forEach((row, index) => {
+        this.forEachRow(this.tileValues, (row, index) => {
           let result = { arr: this.moveArrayRight(row) };
           this.score += this.combineArrayRight(result);
 
@@ -364,7 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         let canMove = false;
-        this.tileValues.forEach((row, rowIndex) => {
+        this.forEachRow(this.tileValues, (row, rowIndex) => {
           for (let col = 0; col !== this.dimension; col++) {
             if (posCanMove(rowIndex, col)) {
               canMove = true;
