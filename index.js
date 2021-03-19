@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             continue;
           }
 
-          callback(col, colArray);
+          callback(colArray, col);
         }
       },
       isGameEnabled: function () {
@@ -241,16 +241,16 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       goUp: function () {
         var movedTiles = false;
-        this.forEachColumn(this.tileValues, (col, colArray) => {
-          let result = { arr: this.moveArrayLeft(colArray) };
+        this.forEachColumn(this.tileValues, (col, index) => {
+          let result = { arr: this.moveArrayLeft(col) };
           this.score += this.combineArrayLeft(result);
 
-          if (movedTiles || arraysDifferent(colArray, result.arr)) {
+          if (movedTiles || arraysDifferent(col, result.arr)) {
             movedTiles = true;
           }
 
           verifyArray(result.arr);
-          this.writeColArray(col, result.arr);
+          this.writeColArray(index, result.arr);
         });
 
         if (movedTiles) {
@@ -259,16 +259,16 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       goDown: function () {
         var movedTiles = false;
-        this.forEachColumn(this.tileValues, (col, colArray) => {
-          let result = { arr: this.moveArrayRight(colArray) };
+        this.forEachColumn(this.tileValues, (col, index) => {
+          let result = { arr: this.moveArrayRight(col) };
           this.score += this.combineArrayRight(result);
 
-          if (movedTiles || arraysDifferent(colArray, result.arr)) {
+          if (movedTiles || arraysDifferent(col, result.arr)) {
             movedTiles = true;
           }
 
           verifyArray(result.arr);
-          this.writeColArray(col, result.arr);
+          this.writeColArray(index, result.arr);
         });
 
         if (movedTiles) {
