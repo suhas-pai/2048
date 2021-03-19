@@ -44,8 +44,7 @@ const arraysDifferent = (left, right) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  new Vue({
-    el: "#app",
+  let app = Vue.createApp({
     data: () => {
       return {
         tilesFree: 0,
@@ -233,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       writeColArray: function (col, colArray) {
         for (let row = 0; row < this.dimension; row++) {
-          this.writeIndex(row, col, colArray[row]);
+          this.writeValueToTile(row, col, colArray[row]);
         }
       },
       goUp: function () {
@@ -317,23 +316,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return "tile-empty";
       },
       setTileAtPos: function (row, col, val) {
-        this.writeIndex(row, col, val);
+        this.writeValueToTile(row, col, val);
         this.tilesFree--;
       },
-      writeIndex: function (row, col, value) {
-        // Reactive 2d array-setting in Vue
-        // https://stackoverflow.com/a/45644966
-
-        const newRow = this.tileValues[row].slice(0);
-        newRow[col] = value;
-
-        this.setRow(row, newRow);
+      writeValueToTile: function (row, col, value) {
+        this.tileValues[row][col] = value;
       },
       setRow: function (row, newRow) {
-        // Reactive 2d array-setting in Vue
-        // https://stackoverflow.com/a/45644966
-
-        this.$set(this.tileValues, row, newRow);
+        this.tileValues[row] = newRow;
       },
       checkIfGameOver: function () {
         if (this.tilesFree != 0) {
@@ -452,4 +442,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     },
   });
+
+  app.mount("#app");
 });
