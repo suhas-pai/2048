@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let result = { arr: this.moveArrayLeft(colArray) };
           this.score += this.combineArrayLeft(result);
 
-          if (arraysDifferent(colArray, result.arr)) {
+          if (movedTiles || arraysDifferent(colArray, result.arr)) {
             movedTiles = true;
           }
 
@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let result = { arr: this.moveArrayRight(colArray) };
           this.score += this.combineArrayRight(result);
 
-          if (arraysDifferent(colArray, result.arr)) {
+          if (movedTiles || arraysDifferent(colArray, result.arr)) {
             movedTiles = true;
           }
 
@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let result = { arr: this.moveArrayLeft(row) };
           this.score += this.combineArrayLeft(result);
 
-          if (arraysDifferent(row, result.arr)) {
+          if (movedTiles || arraysDifferent(row, result.arr)) {
             movedTiles = true;
           }
 
@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let result = { arr: this.moveArrayRight(row) };
           this.score += this.combineArrayRight(result);
 
-          if (arraysDifferent(row, result.arr)) {
+          if (movedTiles || arraysDifferent(row, result.arr)) {
             movedTiles = true;
           }
 
